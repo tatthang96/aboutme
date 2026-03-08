@@ -1,28 +1,30 @@
 /* =============================================
-   PIXEL THEME - Retro Gaming Style
+   PIXEL THEME - Retro Gaming Style (Blue)
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
 /* === CSS Variables === */
 :root {
-  --pixel-primary: #6c5ce7;
-  --pixel-secondary: #00cec9;
-  --pixel-accent: #fd79a8;
-  --pixel-gold: #ffeaa7;
-  --pixel-dark: #0a0a1a;
-  --pixel-darker: #050510;
-  --pixel-card: #12122a;
-  --pixel-card-border: #2d2d5e;
-  --pixel-text: #e0e0ff;
-  --pixel-text-dim: #8888aa;
-  --pixel-green: #55efc4;
+  --pixel-primary: #2563EB;
+  --pixel-primary-light: #3B82F6;
+  --pixel-primary-dark: #1D4ED8;
+  --pixel-secondary: #60A5FA;
+  --pixel-accent: #93C5FD;
+  --pixel-gold: #FBBF24;
+  --pixel-dark: #0B1120;
+  --pixel-darker: #060D1B;
+  --pixel-card: #111827;
+  --pixel-card-border: #1E3A5F;
+  --pixel-text: #E2E8F0;
+  --pixel-text-dim: #64748B;
+  --pixel-green: #34D399;
   --pixel-font: 'Press Start 2P', monospace;
   --pixel-font-body: 'VT323', monospace;
   --pixel-border: 3px solid;
-  --vp-c-brand-1: #6c5ce7;
-  --vp-c-brand-2: #a29bfe;
-  --vp-c-brand-3: #6c5ce7;
+  --vp-c-brand-1: #2563EB;
+  --vp-c-brand-2: #3B82F6;
+  --vp-c-brand-3: #1D4ED8;
   --vp-home-hero-name-color: transparent;
 }
 
@@ -121,7 +123,7 @@ body {
 }
 
 .vp-doc tr:nth-child(even) {
-  background: rgba(108, 92, 231, 0.05) !important;
+  background: rgba(37, 99, 235, 0.05) !important;
 }
 
 .vp-doc hr {
@@ -197,8 +199,8 @@ body {
 }
 
 .avatar-frame {
-  width: 180px;
-  height: 260px;
+  width: 200px;
+  height: 240px;
   border: 4px solid var(--pixel-primary);
   background: var(--pixel-card);
   display: flex;
@@ -207,8 +209,8 @@ body {
   position: relative;
   animation: avatarBob 2s ease-in-out infinite;
   box-shadow:
-    0 0 20px rgba(108, 92, 231, 0.3),
-    inset 0 0 20px rgba(108, 92, 231, 0.1);
+    0 0 20px rgba(37, 99, 235, 0.3),
+    inset 0 0 20px rgba(37, 99, 235, 0.1);
 }
 
 .avatar-frame::before {
@@ -228,15 +230,15 @@ body {
 }
 
 .pixel-avatar {
-  width: 140px;
+  width: 180px;
   height: auto;
   image-rendering: pixelated;
 }
 
 .avatar-shadow {
-  width: 120px;
+  width: 140px;
   height: 12px;
-  background: rgba(108, 92, 231, 0.3);
+  background: rgba(37, 99, 235, 0.3);
   margin: 0 auto;
   margin-top: 12px;
   border-radius: 50%;
@@ -305,6 +307,9 @@ body {
   letter-spacing: 3px;
   margin-bottom: 1rem;
   animation: fadeSlideIn 0.6s ease-out 0.3s both;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .glitch-text {
@@ -337,11 +342,14 @@ body {
   margin-bottom: 1.5rem !important;
   min-height: 30px;
   animation: fadeSlideIn 0.6s ease-out 0.7s both;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.pixel-arrow {
+.pixel-arrow-icon {
   color: var(--pixel-green);
-  margin-right: 4px;
+  flex-shrink: 0;
 }
 
 @keyframes fadeSlideIn {
@@ -368,6 +376,9 @@ body {
   font-size: 8px;
   color: var(--pixel-text-dim);
   letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .stat-value {
@@ -413,14 +424,16 @@ body {
   color: white !important;
   box-shadow:
     4px 4px 0 rgba(0,0,0,0.4),
-    0 0 15px rgba(108, 92, 231, 0.3);
+    0 0 15px rgba(37, 99, 235, 0.3);
 }
 
 .pixel-btn.primary:hover {
+  background: var(--pixel-primary-light);
+  border-color: var(--pixel-primary-light);
   transform: translate(-2px, -2px);
   box-shadow:
     6px 6px 0 rgba(0,0,0,0.4),
-    0 0 25px rgba(108, 92, 231, 0.5);
+    0 0 25px rgba(37, 99, 235, 0.5);
 }
 
 .pixel-btn.primary:active {
@@ -458,8 +471,7 @@ body {
   animation: bounceDown 1.5s ease-in-out infinite;
 }
 
-.scroll-arrow {
-  font-size: 16px;
+.scroll-arrow-icon {
   color: var(--pixel-primary);
 }
 
@@ -506,8 +518,8 @@ body {
 
 .title-deco {
   color: var(--pixel-primary);
-  font-size: 8px;
-  letter-spacing: 4px;
+  display: flex;
+  gap: 4px;
 }
 
 /* === Skill Cards === */
@@ -542,7 +554,7 @@ body {
 .skill-card:hover {
   border-color: var(--pixel-primary);
   transform: translateY(-3px);
-  box-shadow: 0 6px 0 rgba(108, 92, 231, 0.2);
+  box-shadow: 0 6px 0 rgba(37, 99, 235, 0.2);
 }
 
 .skill-card:hover::before {
@@ -550,8 +562,8 @@ body {
 }
 
 .skill-icon {
-  font-size: 28px;
   margin-bottom: 0.75rem;
+  color: var(--pixel-secondary);
 }
 
 .skill-name {
@@ -611,7 +623,7 @@ body {
 .quest-card:hover {
   border-color: var(--pixel-gold);
   transform: translateY(-3px);
-  box-shadow: 0 6px 0 rgba(255, 234, 167, 0.15);
+  box-shadow: 0 6px 0 rgba(251, 191, 36, 0.15);
 }
 
 .quest-header {
@@ -624,8 +636,11 @@ body {
 .quest-type {
   font-family: var(--pixel-font);
   font-size: 8px;
-  color: var(--pixel-accent);
+  color: var(--pixel-secondary);
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .quest-status {
@@ -672,13 +687,16 @@ body {
   font-family: var(--pixel-font);
   font-size: 7px;
   color: var(--pixel-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .reward-item {
   font-family: var(--pixel-font);
   font-size: 8px;
   padding: 2px 8px;
-  background: rgba(108, 92, 231, 0.2);
+  background: rgba(37, 99, 235, 0.2);
   color: var(--pixel-secondary);
   border: 1px solid var(--pixel-card-border);
 }
@@ -692,12 +710,12 @@ body {
   }
 
   .avatar-frame {
-    width: 140px;
-    height: 200px;
+    width: 160px;
+    height: 190px;
   }
 
   .pixel-avatar {
-    width: 110px;
+    width: 140px;
   }
 
   .speech-bubble {
@@ -716,6 +734,14 @@ body {
   .hero-actions {
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .hero-tagline {
+    justify-content: center;
+  }
+
+  .pixel-badge {
+    justify-content: center;
   }
 
   .skill-grid {
