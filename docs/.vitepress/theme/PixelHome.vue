@@ -22,32 +22,35 @@
 
         <!-- Text content -->
         <div class="hero-text">
-          <div class="pixel-badge">[ DEVELOPER ]</div>
+          <div class="pixel-badge">
+            <PhTerminalWindow :size="16" weight="bold" />
+            DEVELOPER
+          </div>
           <h1 class="glitch-text" data-text="Tat Thang">
             <span class="typing-text">{{ displayedName }}</span>
             <span class="cursor">_</span>
           </h1>
           <p class="hero-tagline">
-            <span class="pixel-arrow">&gt;</span> {{ displayedTagline }}<span class="cursor secondary">_</span>
+            <PhCaretRight :size="18" weight="bold" class="pixel-arrow-icon" /> {{ displayedTagline }}<span class="cursor secondary">_</span>
           </p>
 
           <div class="hero-stats">
             <div class="stat-item">
-              <span class="stat-label">CLASS</span>
+              <span class="stat-label"><PhCode :size="12" weight="bold" /> CLASS</span>
               <span class="stat-value">Full-Stack Dev</span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">STATUS</span>
+              <span class="stat-label"><PhWifiHigh :size="12" weight="bold" /> STATUS</span>
               <span class="stat-value online">Online</span>
             </div>
           </div>
 
           <div class="hero-actions">
             <a :href="withBase('/about')" class="pixel-btn primary">
-              <span class="btn-icon">&#9654;</span> About Me
+              <PhUser :size="16" weight="bold" /> About Me
             </a>
             <a :href="withBase('/projects')" class="pixel-btn secondary">
-              <span class="btn-icon">&#9733;</span> Projects
+              <PhRocketLaunch :size="16" weight="bold" /> Projects
             </a>
           </div>
         </div>
@@ -55,7 +58,7 @@
 
       <!-- Scroll indicator -->
       <div class="scroll-indicator">
-        <span class="scroll-arrow">&#9660;</span>
+        <PhCaretDown :size="20" weight="bold" class="scroll-arrow-icon" />
         <span class="scroll-text">SCROLL DOWN</span>
       </div>
     </section>
@@ -63,14 +66,16 @@
     <!-- Skills Section -->
     <section class="pixel-section">
       <h2 class="section-title">
-        <span class="title-deco">&#9632;&#9632;&#9632;</span>
+        <span class="title-deco"><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /></span>
         SKILLS & ABILITIES
-        <span class="title-deco">&#9632;&#9632;&#9632;</span>
+        <span class="title-deco"><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /></span>
       </h2>
 
       <div class="skill-grid">
         <div v-for="(skill, i) in skills" :key="i" class="skill-card" :style="{ animationDelay: `${i * 0.15}s` }">
-          <div class="skill-icon">{{ skill.icon }}</div>
+          <div class="skill-icon">
+            <component :is="skill.icon" :size="32" weight="duotone" />
+          </div>
           <h3 class="skill-name">{{ skill.name }}</h3>
           <div class="skill-bar-container">
             <div class="skill-bar" :style="{ width: skill.level + '%' }">
@@ -85,21 +90,24 @@
     <!-- Quest Board -->
     <section class="pixel-section dark">
       <h2 class="section-title">
-        <span class="title-deco">&#9632;&#9632;&#9632;</span>
+        <span class="title-deco"><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /></span>
         QUEST BOARD
-        <span class="title-deco">&#9632;&#9632;&#9632;</span>
+        <span class="title-deco"><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /></span>
       </h2>
 
       <div class="quest-grid">
         <div v-for="(quest, i) in quests" :key="i" class="quest-card">
           <div class="quest-header">
-            <span class="quest-type">{{ quest.type }}</span>
+            <span class="quest-type">
+              <component :is="quest.icon" :size="14" weight="bold" />
+              {{ quest.type }}
+            </span>
             <span class="quest-status" :class="quest.status">{{ quest.statusText }}</span>
           </div>
           <h3 class="quest-name">{{ quest.name }}</h3>
           <p class="quest-desc">{{ quest.desc }}</p>
           <div class="quest-rewards">
-            <span class="reward-label">REWARDS:</span>
+            <span class="reward-label"><PhTrophy :size="12" weight="bold" /> REWARDS:</span>
             <span class="reward-item" v-for="(r, j) in quest.rewards" :key="j">{{ r }}</span>
           </div>
         </div>
@@ -111,6 +119,24 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { withBase } from 'vitepress'
+import {
+  PhTerminalWindow,
+  PhCaretRight,
+  PhCaretDown,
+  PhCode,
+  PhWifiHigh,
+  PhUser,
+  PhRocketLaunch,
+  PhSquare,
+  PhGlobeSimple,
+  PhBracketsCurly,
+  PhLightning,
+  PhWrench,
+  PhSword,
+  PhHandHeart,
+  PhBookOpen,
+  PhTrophy,
+} from '@phosphor-icons/vue'
 
 const displayedName = ref('')
 const displayedTagline = ref('')
@@ -118,15 +144,16 @@ const fullName = 'Tat Thang'
 const fullTagline = 'Building things for the web, one pixel at a time...'
 
 const skills = [
-  { icon: '&#x1F310;', name: 'Web Dev', level: 85, desc: 'HTML, CSS, JavaScript & modern frameworks' },
-  { icon: '&#x1F4BB;', name: 'Clean Code', level: 80, desc: 'Maintainable & well-structured code' },
-  { icon: '&#x1F680;', name: 'Learning', level: 95, desc: 'Always exploring new technologies' },
-  { icon: '&#x1F527;', name: 'Problem Solving', level: 88, desc: 'Debugging & creative solutions' },
+  { icon: PhGlobeSimple, name: 'Web Dev', level: 85, desc: 'HTML, CSS, JavaScript & modern frameworks' },
+  { icon: PhBracketsCurly, name: 'Clean Code', level: 80, desc: 'Maintainable & well-structured code' },
+  { icon: PhLightning, name: 'Learning', level: 95, desc: 'Always exploring new technologies' },
+  { icon: PhWrench, name: 'Problem Solving', level: 88, desc: 'Debugging & creative solutions' },
 ]
 
 const quests = [
   {
     type: 'MAIN QUEST',
+    icon: PhSword,
     name: 'Web Development',
     desc: 'Building responsive and modern web applications with cutting-edge technologies.',
     status: 'active',
@@ -135,6 +162,7 @@ const quests = [
   },
   {
     type: 'SIDE QUEST',
+    icon: PhHandHeart,
     name: 'Open Source',
     desc: 'Contributing to open source projects and sharing knowledge with the community.',
     status: 'active',
@@ -143,6 +171,7 @@ const quests = [
   },
   {
     type: 'DAILY',
+    icon: PhBookOpen,
     name: 'Continuous Learning',
     desc: 'Exploring new tools, frameworks, and best practices every day.',
     status: 'completed',
@@ -153,7 +182,7 @@ const quests = [
 
 function randomPixelStyle(n: number) {
   const size = 4 + Math.floor(Math.random() * 8)
-  const colors = ['#6c5ce7', '#00cec9', '#fd79a8', '#ffeaa7', '#55efc4', '#a29bfe']
+  const colors = ['#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#1D4ED8', '#BFDBFE']
   return {
     width: size + 'px',
     height: size + 'px',

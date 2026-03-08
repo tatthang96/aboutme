@@ -17,5 +17,8 @@
   "license": "ISC",
   "devDependencies": {
     "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "@phosphor-icons/vue": "^2.2.1"
   }
 }
