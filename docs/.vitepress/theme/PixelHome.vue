@@ -113,12 +113,18 @@
         </div>
       </div>
     </section>
+
+    <!-- Dino Runner Mini Game -->
+    <section class="pixel-section">
+      <DinoGame />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { withBase } from 'vitepress'
+import DinoGame from './DinoGame.vue'
 import {
   PhTerminalWindow,
   PhCaretRight,
