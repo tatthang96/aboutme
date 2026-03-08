@@ -1,126 +1,151 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 36" width="256" height="288" shape-rendering="crispEdges">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 40" width="256" height="320" shape-rendering="crispEdges">
+  <style>
+    /* Gangnam Style dance: body bounces, arms lasso, legs alternate */
+    .gs-body { animation: gsBounce 0.5s ease-in-out infinite; transform-origin: 16px 20px; }
+    .gs-left-arm { animation: gsLasso 0.5s ease-in-out infinite; transform-origin: 11px 15px; }
+    .gs-right-arm { animation: gsRightArm 0.5s ease-in-out infinite; transform-origin: 21px 15px; }
+    .gs-left-leg { animation: gsLeftLeg 0.5s ease-in-out infinite; transform-origin: 13px 26px; }
+    .gs-right-leg { animation: gsRightLeg 0.5s ease-in-out infinite; transform-origin: 19px 26px; }
+    .gs-sunglasses { animation: gsBounce 0.5s ease-in-out infinite; transform-origin: 16px 8px; }
+
+    @keyframes gsBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    @keyframes gsLasso {
+      0% { transform: rotate(-15deg) translateY(0); }
+      25% { transform: rotate(10deg) translateY(-3px); }
+      50% { transform: rotate(-15deg) translateY(-1px); }
+      75% { transform: rotate(10deg) translateY(-3px); }
+      100% { transform: rotate(-15deg) translateY(0); }
+    }
+    @keyframes gsRightArm {
+      0% { transform: rotate(10deg); }
+      25% { transform: rotate(-5deg) translateY(-1px); }
+      50% { transform: rotate(10deg); }
+      75% { transform: rotate(-5deg) translateY(-1px); }
+      100% { transform: rotate(10deg); }
+    }
+    @keyframes gsLeftLeg {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(20deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-10deg); }
+    }
+    @keyframes gsRightLeg {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(20deg); }
+    }
+  </style>
+
   <!-- Hair -->
-  <rect x="10" y="1" width="12" height="1" fill="#1a1a2e"/>
-  <rect x="9" y="2" width="14" height="1" fill="#1a1a2e"/>
-  <rect x="9" y="3" width="14" height="1" fill="#1a1a2e"/>
-  <rect x="9" y="4" width="14" height="1" fill="#1a1a2e"/>
+  <g class="gs-body">
+    <rect x="11" y="2" width="10" height="1" fill="#1a1a2e"/>
+    <rect x="10" y="3" width="12" height="2" fill="#1a1a2e"/>
 
-  <!-- Face sides + hair -->
-  <rect x="9" y="5" width="1" height="1" fill="#1a1a2e"/>
-  <rect x="10" y="5" width="12" height="1" fill="#f5c6a0"/>
-  <rect x="22" y="5" width="1" height="1" fill="#1a1a2e"/>
+    <!-- Face -->
+    <rect x="11" y="5" width="10" height="5" fill="#f5c6a0"/>
 
-  <!-- Eyes row -->
-  <rect x="9" y="6" width="1" height="1" fill="#1a1a2e"/>
-  <rect x="10" y="6" width="12" height="1" fill="#f5c6a0"/>
-  <rect x="22" y="6" width="1" height="1" fill="#1a1a2e"/>
-  <!-- Glasses frames -->
-  <rect x="11" y="6" width="3" height="2" fill="none" stroke="#3B82F6" stroke-width="0.6"/>
-  <rect x="17" y="6" width="3" height="2" fill="none" stroke="#3B82F6" stroke-width="0.6"/>
-  <line x1="14" y1="7" x2="17" y2="7" stroke="#3B82F6" stroke-width="0.6"/>
-  <!-- Eyes (inside glasses) -->
-  <rect x="12" y="7" width="1" height="1" fill="#1a1a2e"/>
-  <rect x="18" y="7" width="1" height="1" fill="#1a1a2e"/>
-  <!-- Eye shine -->
-  <rect x="12" y="6.5" width="0.5" height="0.5" fill="#ffffff" opacity="0.7"/>
-  <rect x="18" y="6.5" width="0.5" height="0.5" fill="#ffffff" opacity="0.7"/>
+    <!-- Eyes -->
+    <rect x="13" y="7" width="1" height="1" fill="#1a1a2e"/>
+    <rect x="18" y="7" width="1" height="1" fill="#1a1a2e"/>
+    <!-- Eye shine -->
+    <rect x="13" y="6.5" width="0.5" height="0.5" fill="#fff" opacity="0.6"/>
+    <rect x="18" y="6.5" width="0.5" height="0.5" fill="#fff" opacity="0.6"/>
 
-  <!-- Face lower -->
-  <rect x="10" y="8" width="12" height="1" fill="#f5c6a0"/>
-  <!-- Smile -->
-  <rect x="13" y="8" width="1" height="1" fill="#e8a088"/>
-  <rect x="14" y="9" width="4" height="1" fill="#e8a088"/>
-  <rect x="18" y="8" width="1" height="1" fill="#e8a088"/>
+    <!-- Smile -->
+    <rect x="14" y="9" width="4" height="1" fill="#e8a088"/>
+    <rect x="13" y="8.5" width="1" height="0.5" fill="#e8a088"/>
+    <rect x="18" y="8.5" width="1" height="0.5" fill="#e8a088"/>
 
-  <rect x="10" y="9" width="12" height="1" fill="#f5c6a0"/>
+    <!-- Neck -->
+    <rect x="14" y="10" width="4" height="1" fill="#f5c6a0"/>
 
-  <!-- Neck -->
-  <rect x="14" y="10" width="4" height="1" fill="#f5c6a0"/>
+    <!-- Jacket / Body -->
+    <rect x="9" y="11" width="14" height="2" fill="#2563EB"/>
+    <rect x="9" y="13" width="14" height="3" fill="#1D4ED8"/>
+    <!-- Jacket lapels -->
+    <rect x="14" y="11" width="4" height="1" fill="#ffffff"/>
+    <!-- Tie -->
+    <rect x="15" y="12" width="2" height="3" fill="#1e293b"/>
+    <rect x="15.5" y="15" width="1" height="1" fill="#1e293b"/>
 
-  <!-- Shirt / body -->
-  <rect x="8" y="11" width="16" height="1" fill="#2563EB"/>
-  <rect x="7" y="12" width="18" height="1" fill="#2563EB"/>
-  <rect x="7" y="13" width="18" height="1" fill="#2563EB"/>
-  <rect x="7" y="14" width="18" height="1" fill="#1D4ED8"/>
-  <rect x="8" y="15" width="16" height="1" fill="#1D4ED8"/>
-  <!-- Shirt logo/detail -->
-  <rect x="14" y="12" width="4" height="2" fill="#3B82F6"/>
+    <!-- Belt -->
+    <rect x="10" y="16" width="12" height="1" fill="#1e293b"/>
+    <rect x="15" y="16" width="2" height="1" fill="#FBBF24"/>
+  </g>
 
-  <!-- Upper arms -->
-  <rect x="5" y="12" width="2" height="3" fill="#f5c6a0"/>
-  <rect x="25" y="12" width="2" height="3" fill="#f5c6a0"/>
+  <!-- Sunglasses (bouncing with body) -->
+  <g class="gs-sunglasses">
+    <rect x="12" y="6" width="3.5" height="2" rx="0" fill="#1a1a2e"/>
+    <rect x="16.5" y="6" width="3.5" height="2" rx="0" fill="#1a1a2e"/>
+    <rect x="15.5" y="6.5" width="1" height="0.5" fill="#1a1a2e"/>
+    <rect x="11" y="6.5" width="1" height="0.5" fill="#1a1a2e"/>
+    <rect x="20" y="6.5" width="1" height="0.5" fill="#1a1a2e"/>
+    <!-- Lens glare -->
+    <rect x="13" y="6.5" width="1" height="0.5" fill="#3B82F6" opacity="0.5"/>
+    <rect x="17.5" y="6.5" width="1" height="0.5" fill="#3B82F6" opacity="0.5"/>
+  </g>
 
-  <!-- Forearms reaching to keyboard -->
-  <rect x="5" y="15" width="1" height="1" fill="#f5c6a0"/>
-  <rect x="6" y="16" width="1" height="1" fill="#f5c6a0"/>
-  <rect x="7" y="17" width="1" height="1" fill="#f5c6a0"/>
-  <rect x="26" y="15" width="1" height="1" fill="#f5c6a0"/>
-  <rect x="25" y="16" width="1" height="1" fill="#f5c6a0"/>
-  <rect x="24" y="17" width="1" height="1" fill="#f5c6a0"/>
+  <!-- Left arm (lasso motion - the signature move!) -->
+  <g class="gs-left-arm">
+    <!-- Upper arm -->
+    <rect x="7" y="12" width="2" height="3" fill="#f5c6a0"/>
+    <!-- Forearm going up (lasso!) -->
+    <rect x="6" y="9" width="2" height="3" fill="#f5c6a0"/>
+    <!-- Hand (twirling) -->
+    <rect x="5" y="7" width="3" height="2" fill="#f5c6a0"/>
+    <!-- Lasso circle -->
+    <circle cx="6.5" cy="5.5" r="2.5" fill="none" stroke="#FBBF24" stroke-width="0.8" opacity="0.8">
+      <animate attributeName="r" values="2;3;2" dur="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;0.4;0.8" dur="0.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
 
-  <!-- Hands on keyboard -->
-  <rect x="8" y="18" width="2" height="1" fill="#f5c6a0"/>
-  <rect x="22" y="18" width="2" height="1" fill="#f5c6a0"/>
+  <!-- Right arm (pumping) -->
+  <g class="gs-right-arm">
+    <rect x="23" y="12" width="2" height="3" fill="#f5c6a0"/>
+    <rect x="24" y="14" width="2" height="2" fill="#f5c6a0"/>
+    <rect x="24" y="16" width="2" height="1" fill="#f5c6a0"/>
+  </g>
 
-  <!-- Desk surface -->
-  <rect x="2" y="19" width="28" height="1" fill="#475569"/>
-  <rect x="1" y="20" width="30" height="1" fill="#334155"/>
+  <!-- Left leg (kicking Gangnam style) -->
+  <g class="gs-left-leg">
+    <!-- Pants -->
+    <rect x="11" y="17" width="4" height="5" fill="#1e293b"/>
+    <!-- Shoe -->
+    <rect x="10" y="22" width="5" height="2" fill="#111827"/>
+    <rect x="9" y="23" width="2" height="1" fill="#111827"/>
+  </g>
 
-  <!-- Keyboard -->
-  <rect x="6" y="18" width="20" height="1" fill="#1e293b"/>
-  <rect x="5" y="17" width="22" height="1" fill="#334155"/>
-  <!-- Keyboard keys (top row) -->
-  <rect x="6" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="8" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="10" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="12" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="14" y="17" width="3" height="0.5" fill="#60a5fa"/>
-  <rect x="18" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="20" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="22" y="17" width="1" height="0.5" fill="#64748b"/>
-  <rect x="24" y="17" width="1" height="0.5" fill="#64748b"/>
-  <!-- Keyboard keys (bottom row) -->
-  <rect x="7" y="18" width="1" height="0.5" fill="#64748b"/>
-  <rect x="9" y="18" width="1" height="0.5" fill="#64748b"/>
-  <rect x="11" y="18" width="1" height="0.5" fill="#64748b"/>
-  <rect x="13" y="18" width="6" height="0.5" fill="#60a5fa"/>
-  <rect x="20" y="18" width="1" height="0.5" fill="#64748b"/>
+  <!-- Right leg (alternating kick) -->
+  <g class="gs-right-leg">
+    <rect x="17" y="17" width="4" height="5" fill="#1e293b"/>
+    <rect x="17" y="22" width="5" height="2" fill="#111827"/>
+    <rect x="21" y="23" width="2" height="1" fill="#111827"/>
+  </g>
 
-  <!-- Monitor -->
-  <rect x="10" y="21" width="12" height="1" fill="#475569"/>
-  <rect x="14" y="22" width="4" height="1" fill="#475569"/>
+  <!-- Shadow on floor -->
+  <ellipse cx="16" cy="25.5" rx="8" ry="1.5" fill="#2563EB" opacity="0.15">
+    <animate attributeName="rx" values="8;6;8" dur="0.5s" repeatCount="indefinite"/>
+  </ellipse>
 
-  <!-- Pants -->
-  <rect x="10" y="16" width="12" height="1" fill="#1e293b"/>
-  <rect x="10" y="17" width="4" height="0" fill="#1e293b"/>
-  <rect x="18" y="17" width="4" height="0" fill="#1e293b"/>
-
-  <!-- Chair back -->
-  <rect x="9" y="15" width="1" height="4" fill="#374151"/>
-  <rect x="22" y="15" width="1" height="4" fill="#374151"/>
-  <rect x="9" y="11" width="1" height="1" fill="#4B5563"/>
-  <rect x="22" y="11" width="1" height="1" fill="#4B5563"/>
-
-  <!-- Monitor screen (floating above desk) -->
-  <rect x="10" y="0" width="0" height="0" fill="#1e293b"/>
-
-  <!-- Typing animation indicators (little motion lines) -->
-  <rect x="8" y="17" width="0.5" height="0.5" fill="#60a5fa" opacity="0.6">
-    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.4s" repeatCount="indefinite"/>
-  </rect>
-  <rect x="23" y="17" width="0.5" height="0.5" fill="#60a5fa" opacity="0.6">
-    <animate attributeName="opacity" values="0;0.6;0" dur="0.4s" repeatCount="indefinite"/>
-  </rect>
-
-  <!-- Floating code symbols -->
-  <text x="3" y="5" font-family="monospace" font-size="3" fill="#3B82F6" opacity="0.5">
-    &lt;/&gt;
-    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite"/>
-    <animate attributeName="y" values="5;3;5" dur="3s" repeatCount="indefinite"/>
+  <!-- Music notes floating -->
+  <text x="2" y="6" font-family="monospace" font-size="3" fill="#60A5FA" opacity="0.7">
+    ♪
+    <animate attributeName="y" values="6;2;6" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;0.2;0.7" dur="1.5s" repeatCount="indefinite"/>
   </text>
-  <text x="27" y="8" font-family="monospace" font-size="2.5" fill="#60A5FA" opacity="0.4">
-    { }
-    <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2.5s" repeatCount="indefinite"/>
-    <animate attributeName="y" values="8;6;8" dur="3.5s" repeatCount="indefinite"/>
+  <text x="27" y="4" font-family="monospace" font-size="3.5" fill="#3B82F6" opacity="0.6">
+    ♫
+    <animate attributeName="y" values="4;1;4" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.15;0.6" dur="2s" repeatCount="indefinite"/>
+  </text>
+  <text x="25" y="10" font-family="monospace" font-size="2.5" fill="#93C5FD" opacity="0.5">
+    ♪
+    <animate attributeName="y" values="10;7;10" dur="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="1.8s" repeatCount="indefinite"/>
   </text>
 </svg>
