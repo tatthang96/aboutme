@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 24" width="128" height="192" shape-rendering="crispEdges">
+  <!-- Hair -->
+  <rect x="4" y="0" width="8" height="1" fill="#2d1b69"/>
+  <rect x="3" y="1" width="10" height="1" fill="#2d1b69"/>
+  <rect x="3" y="2" width="10" height="1" fill="#2d1b69"/>
+  <!-- Face -->
+  <rect x="3" y="3" width="1" height="1" fill="#2d1b69"/>
+  <rect x="4" y="3" width="8" height="1" fill="#f5c6a0"/>
+  <rect x="12" y="3" width="1" height="1" fill="#2d1b69"/>
+  <rect x="3" y="4" width="1" height="1" fill="#2d1b69"/>
+  <rect x="4" y="4" width="8" height="1" fill="#f5c6a0"/>
+  <rect x="12" y="4" width="1" height="1" fill="#2d1b69"/>
+  <!-- Eyes -->
+  <rect x="3" y="5" width="10" height="1" fill="#f5c6a0"/>
+  <rect x="5" y="5" width="2" height="1" fill="#1a1a2e"/>
+  <rect x="9" y="5" width="2" height="1" fill="#1a1a2e"/>
+  <!-- Face lower -->
+  <rect x="3" y="6" width="10" height="1" fill="#f5c6a0"/>
+  <rect x="4" y="7" width="8" height="1" fill="#f5c6a0"/>
+  <rect x="6" y="7" width="4" height="1" fill="#e8a088"/>
+  <!-- Mouth -->
+  <rect x="4" y="8" width="8" height="1" fill="#f5c6a0"/>
+  <rect x="6" y="8" width="4" height="1" fill="#c0392b"/>
+  <!-- Neck -->
+  <rect x="6" y="9" width="4" height="1" fill="#f5c6a0"/>
+  <!-- Shirt -->
+  <rect x="2" y="10" width="12" height="1" fill="#6c5ce7"/>
+  <rect x="1" y="11" width="14" height="1" fill="#6c5ce7"/>
+  <rect x="1" y="12" width="14" height="1" fill="#6c5ce7"/>
+  <rect x="1" y="13" width="14" height="1" fill="#6c5ce7"/>
+  <rect x="1" y="14" width="3" height="1" fill="#6c5ce7"/>
+  <rect x="4" y="14" width="8" height="1" fill="#5b4cdb"/>
+  <rect x="12" y="14" width="3" height="1" fill="#6c5ce7"/>
+  <rect x="2" y="15" width="12" height="1" fill="#5b4cdb"/>
+  <!-- Arms -->
+  <rect x="0" y="11" width="1" height="4" fill="#f5c6a0"/>
+  <rect x="15" y="11" width="1" height="4" fill="#f5c6a0"/>
+  <!-- Pants -->
+  <rect x="3" y="16" width="10" height="1" fill="#2d3436"/>
+  <rect x="3" y="17" width="10" height="1" fill="#2d3436"/>
+  <rect x="3" y="18" width="4" height="1" fill="#2d3436"/>
+  <rect x="9" y="18" width="4" height="1" fill="#2d3436"/>
+  <!-- Shoes -->
+  <rect x="2" y="19" width="5" height="1" fill="#e17055"/>
+  <rect x="9" y="19" width="5" height="1" fill="#e17055"/>
+  <!-- Glasses -->
+  <rect x="4" y="4" width="3" height="2" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+  <rect x="9" y="4" width="3" height="2" fill="none" stroke="#ffd700" stroke-width="0.5"/>
+  <line x1="7" y1="5" x2="9" y2="5" stroke="#ffd700" stroke-width="0.5"/>
+</svg>
