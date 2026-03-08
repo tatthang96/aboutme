@@ -1,5 +1,5 @@
 <template>
-  <div class="dino-game-section">
+  <div class="dino-game-section" ref="sectionRef">
     <h2 class="section-title">
       <span class="title-deco"><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /><PhSquare :size="10" weight="fill" /></span>
       BONUS STAGE
@@ -9,48 +9,65 @@
       <PhGameController :size="18" weight="bold" />
       Press SPACE or tap to jump!
     </p>
-    <div class="game-wrapper" @click="handleInput" @keydown.space.prevent="handleInput" tabindex="0" ref="gameWrapper">
-      <canvas ref="canvas" :width="canvasWidth" :height="canvasHeight"></canvas>
+    <div
+      class="game-wrapper"
+      @click="handleInput"
+      @touchstart.prevent="handleInput"
+      @keydown.space.prevent="handleInput"
+      tabindex="0"
+      ref="gameWrapper"
+    >
+      <canvas ref="canvas"></canvas>
       <div v-if="!gameStarted && !gameOver" class="game-overlay">
-        <span class="overlay-text">PRESS SPACE TO START</span>
+        <span class="overlay-text">{{ autoStarting ? 'GET READY...' : 'TAP OR PRESS SPACE' }}</span>
       </div>
       <div v-if="gameOver" class="game-overlay">
         <span class="overlay-text">GAME OVER</span>
         <span class="overlay-score">SCORE: {{ score }}</span>
-        <span class="overlay-sub">PRESS SPACE TO RETRY</span>
+        <span class="overlay-sub">TAP OR PRESS SPACE TO RETRY</span>
       </div>
       <div class="game-score" v-if="gameStarted && !gameOver">
-        <PhTrophy :size="12" weight="bold" /> {{ score }}
+        <PhTrophy :size="14" weight="bold" /> {{ score }}
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { PhSquare, PhGameController, PhTrophy } from '@phosphor-icons/vue'
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 const gameWrapper = ref<HTMLElement | null>(null)
-const canvasWidth = 800
-const canvasHeight = 200
+const sectionRef = ref<HTMLElement | null>(null)
 const score = ref(0)
 const gameStarted = ref(false)
 const gameOver = ref(false)
+const autoStarting = ref(false)
+
+// Internal canvas resolution (will scale to fill container)
+const GAME_W = 960
+const GAME_H = 240
 
 // Game state
 let ctx: CanvasRenderingContext2D | null = null
 let animFrameId = 0
-let groundY = 160
-let gameSpeed = 4
+let groundY = GAME_H - 40
+let gameSpeed = 5
 let frameCount = 0
+let observer: IntersectionObserver | null = null
+let autoStartTimer: ReturnType<typeof setTimeout> | null = null
+let hasAutoStarted = false
+
+// Scale factor for pixel sizes on different resolutions
+const S = GAME_W / 960 // 1x base
 
 // Dino (pixel character)
 const dino = {
-  x: 60,
+  x: 80,
   y: 0,
-  w: 24,
-  h: 32,
+  w: 30,
+  h: 40,
   vy: 0,
   jumping: false,
   frame: 0,
@@ -63,37 +80,58 @@ let nextObstacleIn = 80
 // Clouds
 let clouds: { x: number; y: number; w: number }[] = []
 
+// Stars (background decoration)
+let stars: { x: number; y: number; s: number; b: number }[] = []
+
 function resetGame() {
   dino.y = groundY - dino.h
   dino.vy = 0
   dino.jumping = false
   dino.frame = 0
   obstacles = []
-  clouds = [
-    { x: 200, y: 30, w: 40 },
-    { x: 450, y: 50, w: 30 },
-    { x: 700, y: 20, w: 35 },
-  ]
+  clouds = []
+  for (let i = 0; i < 5; i++) {
+    clouds.push({
+      x: Math.random() * GAME_W,
+      y: 20 + Math.random() * 60,
+      w: 30 + Math.random() * 30,
+    })
+  }
+  stars = []
+  for (let i = 0; i < 30; i++) {
+    stars.push({
+      x: Math.random() * GAME_W,
+      y: Math.random() * (groundY - 20),
+      s: 1 + Math.random() * 2,
+      b: 0.2 + Math.random() * 0.5,
+    })
+  }
   nextObstacleIn = 80
-  gameSpeed = 4
+  gameSpeed = 5
   frameCount = 0
   score.value = 0
 }
 
+function startGame() {
+  gameStarted.value = true
+  gameOver.value = false
+  autoStarting.value = false
+  resetGame()
+  gameLoop()
+  gameWrapper.value?.focus()
+}
+
 function handleInput() {
   if (!gameStarted.value) {
-    gameStarted.value = true
-    gameOver.value = false
-    resetGame()
-    gameLoop()
-    gameWrapper.value?.focus()
+    if (autoStartTimer) {
+      clearTimeout(autoStartTimer)
+      autoStartTimer = null
+    }
+    startGame()
     return
   }
   if (gameOver.value) {
-    gameOver.value = false
-    gameStarted.value = true
-    resetGame()
-    gameLoop()
+    startGame()
     return
   }
   jump()
@@ -101,7 +139,7 @@ function handleInput() {
 
 function jump() {
   if (!dino.jumping) {
-    dino.vy = -12
+    dino.vy = -14
     dino.jumping = true
   }
 }
@@ -125,127 +163,153 @@ function drawDino() {
   const y = Math.floor(dino.y)
 
   // Body (blue jacket - Gangnam style!)
-  drawPixelRect(x + 4, y + 10, 16, 10, '#2563EB')
-  drawPixelRect(x + 6, y + 10, 12, 2, '#1D4ED8')
+  drawPixelRect(x + 5, y + 12, 20, 12, '#2563EB')
+  drawPixelRect(x + 7, y + 12, 16, 3, '#1D4ED8')
 
   // Head
-  drawPixelRect(x + 6, y, 12, 10, '#f5c6a0')
+  drawPixelRect(x + 7, y, 16, 12, '#f5c6a0')
 
   // Hair
-  drawPixelRect(x + 6, y - 2, 12, 3, '#1a1a2e')
+  drawPixelRect(x + 7, y - 3, 16, 4, '#1a1a2e')
 
   // Sunglasses
-  drawPixelRect(x + 7, y + 3, 4, 2, '#1a1a2e')
-  drawPixelRect(x + 13, y + 3, 4, 2, '#1a1a2e')
-  drawPixelRect(x + 11, y + 3.5, 2, 1, '#1a1a2e')
+  drawPixelRect(x + 8, y + 4, 5, 3, '#1a1a2e')
+  drawPixelRect(x + 16, y + 4, 5, 3, '#1a1a2e')
+  drawPixelRect(x + 13, y + 5, 3, 1, '#1a1a2e')
+  // Lens glare
+  drawPixelRect(x + 9, y + 4.5, 2, 1, '#3B82F6')
+  drawPixelRect(x + 17, y + 4.5, 2, 1, '#3B82F6')
 
   // Smile
-  drawPixelRect(x + 9, y + 7, 6, 1, '#e8a088')
+  drawPixelRect(x + 11, y + 9, 8, 1, '#e8a088')
 
   // Legs (running animation)
   if (dino.jumping) {
-    // Both legs tucked
-    drawPixelRect(x + 6, y + 20, 4, 8, '#1e293b')
-    drawPixelRect(x + 14, y + 20, 4, 8, '#1e293b')
-    drawPixelRect(x + 5, y + 28, 5, 4, '#111827')
-    drawPixelRect(x + 14, y + 28, 5, 4, '#111827')
+    drawPixelRect(x + 7, y + 24, 5, 10, '#1e293b')
+    drawPixelRect(x + 18, y + 24, 5, 10, '#1e293b')
+    drawPixelRect(x + 6, y + 34, 6, 4, '#111827')
+    drawPixelRect(x + 18, y + 34, 6, 4, '#111827')
   } else {
     dino.frame = (dino.frame + 0.15) % 2
     if (dino.frame < 1) {
-      // Left forward, right back
-      drawPixelRect(x + 5, y + 20, 4, 8, '#1e293b')
-      drawPixelRect(x + 15, y + 20, 4, 6, '#1e293b')
-      drawPixelRect(x + 4, y + 28, 5, 4, '#111827')
-      drawPixelRect(x + 15, y + 26, 5, 4, '#111827')
+      drawPixelRect(x + 6, y + 24, 5, 10, '#1e293b')
+      drawPixelRect(x + 19, y + 24, 5, 8, '#1e293b')
+      drawPixelRect(x + 5, y + 34, 6, 4, '#111827')
+      drawPixelRect(x + 19, y + 32, 6, 4, '#111827')
     } else {
-      // Right forward, left back
-      drawPixelRect(x + 6, y + 20, 4, 6, '#1e293b')
-      drawPixelRect(x + 14, y + 20, 4, 8, '#1e293b')
-      drawPixelRect(x + 6, y + 26, 5, 4, '#111827')
-      drawPixelRect(x + 13, y + 28, 5, 4, '#111827')
+      drawPixelRect(x + 7, y + 24, 5, 8, '#1e293b')
+      drawPixelRect(x + 18, y + 24, 5, 10, '#1e293b')
+      drawPixelRect(x + 7, y + 32, 6, 4, '#111827')
+      drawPixelRect(x + 17, y + 34, 6, 4, '#111827')
     }
   }
 
   // Arms
-  drawPixelRect(x, y + 12, 4, 3, '#f5c6a0')
-  drawPixelRect(x + 20, y + 12, 4, 3, '#f5c6a0')
+  drawPixelRect(x, y + 14, 5, 4, '#f5c6a0')
+  drawPixelRect(x + 25, y + 14, 5, 4, '#f5c6a0')
 
   // Tie
-  drawPixelRect(x + 11, y + 12, 2, 6, '#1a1a2e')
+  drawPixelRect(x + 14, y + 15, 2, 7, '#FBBF24')
 }
 
 function drawCactus(ox: number, oy: number, ow: number, oh: number) {
   if (!ctx) return
-  // Main trunk
-  drawPixelRect(ox + ow / 2 - 3, oy, 6, oh, '#1E3A5F')
-  // Left branch
-  if (oh > 20) {
-    drawPixelRect(ox, oy + 8, 6, 4, '#1E3A5F')
-    drawPixelRect(ox, oy + 4, 4, 8, '#1E3A5F')
+  drawPixelRect(ox + ow / 2 - 4, oy, 8, oh, '#1E3A5F')
+  if (oh > 25) {
+    drawPixelRect(ox, oy + 10, 8, 5, '#1E3A5F')
+    drawPixelRect(ox, oy + 5, 5, 10, '#1E3A5F')
   }
-  // Right branch
-  if (ow > 12) {
-    drawPixelRect(ox + ow - 6, oy + 12, 6, 4, '#1E3A5F')
-    drawPixelRect(ox + ow - 4, oy + 8, 4, 8, '#1E3A5F')
+  if (ow > 14) {
+    drawPixelRect(ox + ow - 8, oy + 14, 8, 5, '#1E3A5F')
+    drawPixelRect(ox + ow - 5, oy + 10, 5, 10, '#1E3A5F')
   }
-  // Spikes / detail pixels
-  drawPixelRect(ox + ow / 2 - 1, oy - 2, 2, 2, '#2563EB')
+  drawPixelRect(ox + ow / 2 - 1, oy - 3, 3, 3, '#2563EB')
 }
 
 function drawBug(ox: number, oy: number) {
   if (!ctx) return
-  // A flying "bug" obstacle (like a pterodactyl but it's a code bug)
   const f = Math.floor(frameCount / 8) % 2
-  drawPixelRect(ox + 4, oy + 4, 12, 6, '#60A5FA')
-  drawPixelRect(ox + 6, oy + 5, 3, 3, '#1a1a2e') // eye
-  // Wings
+  drawPixelRect(ox + 5, oy + 5, 14, 8, '#60A5FA')
+  drawPixelRect(ox + 7, oy + 6, 4, 4, '#1a1a2e')
   if (f === 0) {
-    drawPixelRect(ox, oy, 8, 4, '#3B82F6')
-    drawPixelRect(ox + 12, oy, 8, 4, '#3B82F6')
+    drawPixelRect(ox, oy, 10, 5, '#3B82F6')
+    drawPixelRect(ox + 14, oy, 10, 5, '#3B82F6')
   } else {
-    drawPixelRect(ox, oy + 6, 8, 4, '#3B82F6')
-    drawPixelRect(ox + 12, oy + 6, 8, 4, '#3B82F6')
+    drawPixelRect(ox, oy + 8, 10, 5, '#3B82F6')
+    drawPixelRect(ox + 14, oy + 8, 10, 5, '#3B82F6')
   }
-  // Antennae
-  drawPixelRect(ox + 3, oy + 2, 1, 3, '#93C5FD')
-  drawPixelRect(ox + 2, oy + 1, 2, 2, '#93C5FD')
+  drawPixelRect(ox + 4, oy + 2, 2, 4, '#93C5FD')
+  drawPixelRect(ox + 3, oy, 3, 3, '#93C5FD')
+}
+
+function drawStars() {
+  if (!ctx) return
+  for (const star of stars) {
+    const flicker = Math.sin(frameCount * 0.05 + star.x) * 0.15
+    ctx.globalAlpha = star.b + flicker
+    ctx.fillStyle = '#60A5FA'
+    ctx.fillRect(star.x, star.y, star.s, star.s)
+  }
+  ctx.globalAlpha = 1
+}
+
+function resizeCanvas() {
+  if (!canvas.value || !gameWrapper.value) return
+  const wrapperW = gameWrapper.value.clientWidth
+  // Maintain aspect ratio, use full width
+  const ratio = GAME_H / GAME_W
+  const displayH = Math.max(wrapperW * ratio, 180)
+
+  canvas.value.width = GAME_W
+  canvas.value.height = GAME_H
+  canvas.value.style.width = wrapperW + 'px'
+  canvas.value.style.height = displayH + 'px'
+
+  if (ctx) {
+    ctx.imageSmoothingEnabled = false
+  }
 }
 
 function gameLoop() {
   if (!ctx || gameOver.value) return
 
-  // Clear
   ctx.fillStyle = '#0B1120'
-  ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+  ctx.fillRect(0, 0, GAME_W, GAME_H)
 
   frameCount++
 
-  // Ground
+  // Stars
+  drawStars()
+
+  // Ground line
+  ctx.fillStyle = '#2563EB'
+  ctx.fillRect(0, groundY, GAME_W, 2)
+  // Ground texture
   ctx.fillStyle = '#1E3A5F'
-  ctx.fillRect(0, groundY, canvasWidth, 2)
-  // Ground details
-  for (let gx = (frameCount * gameSpeed) % 40; gx < canvasWidth; gx += 40) {
-    ctx.fillStyle = '#1E3A5F'
-    ctx.fillRect(canvasWidth - gx, groundY + 6, 8, 2)
-    ctx.fillRect(canvasWidth - gx + 20, groundY + 10, 4, 2)
+  for (let gx = (frameCount * gameSpeed) % 50; gx < GAME_W; gx += 50) {
+    ctx.fillRect(GAME_W - gx, groundY + 6, 10, 2)
+    ctx.fillRect(GAME_W - gx + 25, groundY + 12, 6, 2)
   }
+  // Ground fill
+  ctx.fillStyle = '#080E1A'
+  ctx.fillRect(0, groundY + 2, GAME_W, GAME_H - groundY)
 
   // Clouds
   ctx.fillStyle = '#1E3A5F'
   for (const cloud of clouds) {
-    ctx.globalAlpha = 0.3
-    ctx.fillRect(cloud.x, cloud.y, cloud.w, 6)
-    ctx.fillRect(cloud.x + 4, cloud.y - 4, cloud.w - 8, 6)
+    ctx.globalAlpha = 0.2
+    ctx.fillRect(cloud.x, cloud.y, cloud.w, 8)
+    ctx.fillRect(cloud.x + 5, cloud.y - 5, cloud.w - 10, 8)
     ctx.globalAlpha = 1
     cloud.x -= gameSpeed * 0.3
     if (cloud.x + cloud.w < 0) {
-      cloud.x = canvasWidth + Math.random() * 200
-      cloud.y = 20 + Math.random() * 50
+      cloud.x = GAME_W + Math.random() * 300
+      cloud.y = 20 + Math.random() * 60
     }
   }
 
   // Dino physics
-  dino.vy += 0.7 // gravity
+  dino.vy += 0.8
   dino.y += dino.vy
   if (dino.y >= groundY - dino.h) {
     dino.y = groundY - dino.h
@@ -261,24 +325,24 @@ function gameLoop() {
     const isBug = Math.random() > 0.7 && score.value > 5
     if (isBug) {
       obstacles.push({
-        x: canvasWidth,
-        y: groundY - 45 - Math.random() * 20,
-        w: 20,
-        h: 14,
+        x: GAME_W,
+        y: groundY - 55 - Math.random() * 25,
+        w: 24,
+        h: 18,
         type: 'bug',
       })
     } else {
-      const h = 20 + Math.floor(Math.random() * 20)
-      const w = 10 + Math.floor(Math.random() * 10)
+      const h = 25 + Math.floor(Math.random() * 25)
+      const w = 14 + Math.floor(Math.random() * 12)
       obstacles.push({
-        x: canvasWidth,
+        x: GAME_W,
         y: groundY - h,
         w,
         h,
         type: 'cactus',
       })
     }
-    nextObstacleIn = 50 + Math.floor(Math.random() * 60)
+    nextObstacleIn = 45 + Math.floor(Math.random() * 55)
   }
 
   // Update & draw obstacles
@@ -292,14 +356,13 @@ function gameLoop() {
       drawCactus(obs.x, obs.y, obs.w, obs.h)
     }
 
-    // Remove off-screen
     if (obs.x + obs.w < 0) {
       obstacles.splice(i, 1)
       continue
     }
 
-    // Collision (with some padding for fairness)
-    const pad = 4
+    // Collision
+    const pad = 5
     if (
       dino.x + dino.w - pad > obs.x + pad &&
       dino.x + pad < obs.x + obs.w - pad &&
@@ -317,35 +380,78 @@ function gameLoop() {
   }
 
   // Increase speed
-  if (frameCount % 300 === 0) {
+  if (frameCount % 250 === 0) {
     gameSpeed += 0.3
   }
 
   animFrameId = requestAnimationFrame(gameLoop)
 }
 
+function drawInitialState() {
+  if (!ctx) return
+  ctx.fillStyle = '#0B1120'
+  ctx.fillRect(0, 0, GAME_W, GAME_H)
+
+  // Draw stars
+  for (const star of stars) {
+    ctx.globalAlpha = star.b
+    ctx.fillStyle = '#60A5FA'
+    ctx.fillRect(star.x, star.y, star.s, star.s)
+  }
+  ctx.globalAlpha = 1
+
+  // Ground
+  ctx.fillStyle = '#2563EB'
+  ctx.fillRect(0, groundY, GAME_W, 2)
+  ctx.fillStyle = '#080E1A'
+  ctx.fillRect(0, groundY + 2, GAME_W, GAME_H - groundY)
+
+  dino.y = groundY - dino.h
+  drawDino()
+}
+
 onMounted(() => {
   if (canvas.value) {
     ctx = canvas.value.getContext('2d')
-    if (ctx) {
-      ctx.imageSmoothingEnabled = false
-    }
   }
+
   resetGame()
-  // Draw initial state
-  if (ctx) {
-    ctx.fillStyle = '#0B1120'
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight)
-    ctx.fillStyle = '#1E3A5F'
-    ctx.fillRect(0, groundY, canvasWidth, 2)
-    dino.y = groundY - dino.h
-    drawDino()
-  }
+  nextTick(() => {
+    resizeCanvas()
+    drawInitialState()
+  })
+
   window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('resize', resizeCanvas)
+
+  // Auto-start when scrolled into view
+  if (sectionRef.value) {
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !gameStarted.value && !hasAutoStarted) {
+            hasAutoStarted = true
+            autoStarting.value = true
+            // Brief "GET READY" then auto-start
+            autoStartTimer = setTimeout(() => {
+              if (!gameStarted.value) {
+                startGame()
+              }
+            }, 1200)
+          }
+        }
+      },
+      { threshold: 0.4 }
+    )
+    observer.observe(sectionRef.value)
+  }
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(animFrameId)
   window.removeEventListener('keydown', onKeyDown)
+  window.removeEventListener('resize', resizeCanvas)
+  if (observer) observer.disconnect()
+  if (autoStartTimer) clearTimeout(autoStartTimer)
 })
 </script>

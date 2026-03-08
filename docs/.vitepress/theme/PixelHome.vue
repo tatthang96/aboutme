@@ -115,7 +115,7 @@
     </section>
 
     <!-- Dino Runner Mini Game -->
-    <section class="pixel-section">
+    <section class="pixel-section game-section">
       <DinoGame />
     </section>
   </div>
